@@ -13,11 +13,3 @@
 .titulo {
   @apply text-lg font-semibold text-gray-900 uppercase;
 }
-
-.icono {
-  @apply h-6 w-6;
-}
-
-.vinculo {
-  @apply flex items-center px-4 h-xl hover:bg-gray-200;
-}
