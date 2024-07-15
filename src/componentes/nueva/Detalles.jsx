@@ -1,13 +1,11 @@
 import { useContext, useEffect, useState } from "react";
-import { Contexto } from "../../servicios/Memoria";
+import { actualizarMeta, borrarMeta, Contexto, crearMeta } from "../../servicios/";
 import { useNavigate, useParams } from "react-router-dom";
 
 export function Detalles() {
 
     const [estado, enviar] = useContext(Contexto);
     const { id } = useParams();
-
-    console.log(id);
 
     const [form, setForm] = useState({
         detalles: '',
@@ -23,19 +21,22 @@ export function Detalles() {
 
     const crear = async () => {
         // console.log(form);
-        enviar({ tipo: 'crear', meta: form });
+        const nuevaMeta = await crearMeta(form);
+        enviar({ tipo: 'crear', meta: nuevaMeta });
         navegar('/lista');
     }
 
     const actualizar = async () => {
         // console.log(form);
-        enviar({ tipo: 'actualizar', meta: form });
+        const metaActualizada = await actualizarMeta(form);
+        enviar({ tipo: 'actualizar', meta: metaActualizada });
         navegar('/lista');
     }
 
     const borrar = async () => {
         // console.log(form);
-        enviar({ tipo: 'borrar', id });
+        await borrarMeta(form.id);
+        enviar({ tipo: 'borrar', id: form.id });
         navegar('/lista');
     }
 

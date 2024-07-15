@@ -3,8 +3,20 @@ import { Layout, Modal, NoEncontrado } from './componentes/compartidos'
 import { Route, Routes } from 'react-router-dom'
 import { Lista } from './componentes/lista'
 import { Detalles } from './componentes/nueva'
+import { useContext, useEffect } from 'react'
+import { Contexto, pedirMetas } from './servicios'
 
 function App() {
+
+  const [, enviar] = useContext(Contexto);
+
+  useEffect(() => {
+    async function fetchData() {
+      const metas = await pedirMetas();
+      enviar({ tipo: 'colocar', metas });
+    }
+    fetchData();
+  }, []);
 
   return (
     <Routes>
