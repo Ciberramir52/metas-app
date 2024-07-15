@@ -7,8 +7,8 @@ export function Principal({ children }) {
     return (
         <div className={estilos.principal}>
             <aside className={estilos.aside}>
-                <Vinculo Icono={ListaSVG} texto="Lista de Metas" href="/lista"/>
-                <Vinculo Icono={NuevaSVG} texto="Nueva Meta" href="/nueva"/>
+                <Vinculo Icono={ListaSVG} texto="Lista de Metas" to="/lista"/>
+                <Vinculo Icono={NuevaSVG} texto="Nueva Meta" to="/nueva"/>
             </aside>
             <main className={estilos.main}>
                 {children}

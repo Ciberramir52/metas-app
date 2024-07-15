@@ -1,9 +1,10 @@
+import { Link } from 'react-router-dom';
 import estilos from './Meta.module.css';
 
-export function Meta({ detalles, periodo, eventos, icono, meta, plazo, completado }) {
+export function Meta({ id, detalles, periodo, eventos, icono, meta, plazo, completado }) {
 
     return (
-        <div className={estilos.meta + " tarjeta"}>
+        <Link to={`/lista/${id}`} className={estilos.meta + " tarjeta"}>
             <div className="flex items-center">
                 <div className={estilos.icono}>{icono}</div>
                 <p className="text-xl ml-5 mr-10">
@@ -22,6 +23,6 @@ export function Meta({ detalles, periodo, eventos, icono, meta, plazo, completad
                 </div>
                 <button className='boton boton--gris'>Completado</button>
             </div>
-        </div>
+        </Link>
     );
 }

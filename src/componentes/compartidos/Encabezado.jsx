@@ -11,7 +11,7 @@ export function Encabezado() {
                 <a href="/" className={estilos.titulo}>Metas App</a>
             </div>
             <nav>
-                <Vinculo Icono={PerfilSVG} href="/perfil"/>
+                <Vinculo Icono={PerfilSVG} to="/perfil"/>
             </nav>
         </header>
     );
