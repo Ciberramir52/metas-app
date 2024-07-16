@@ -1,2 +1,2 @@
-export * from './Meta';
-export * from './Lista';
+export * from "./Meta";
+export * from "./Lista";
