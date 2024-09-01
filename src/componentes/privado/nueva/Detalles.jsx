@@ -2,13 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import {
 	actualizarMeta,
 	borrarMeta,
-	Contexto,
 	crearMeta,
-} from "../../servicios/";
+} from "../../../servicios/";
 import { useNavigate, useParams } from "react-router-dom";
+import { ContextoMetas } from "../../../memoria";
 
 export function Detalles() {
-	const [estado, enviar] = useContext(Contexto);
 	const { id } = useParams();
 
 	const [form, setForm] = useState({
@@ -21,45 +20,52 @@ export function Detalles() {
 		plazo: "2030-01-01",
 	});
 
-	const navegar = useNavigate();
+	const [estado, enviar] = useContext(ContextoMetas);
 
-	const crear = async () => {
-		// console.log(form);
-		const nuevaMeta = await crearMeta(form);
-		enviar({ tipo: "crear", meta: nuevaMeta });
-		navegar("/lista");
-	};
-
-	const actualizar = async () => {
-		// console.log(form);
-		const metaActualizada = await actualizarMeta(form);
-		enviar({ tipo: "actualizar", meta: metaActualizada });
-		navegar("/lista");
-	};
-
-	const borrar = async () => {
-		// console.log(form);
-		await borrarMeta(form.id);
-		enviar({ tipo: "borrar", id: form.id });
-		navegar("/lista");
-	};
-
-	const cancelar = () => {
-		navegar("/lista");
-	};
+	const { detalles, eventos, periodo, icono, completado, meta, plazo } = form;
 
 	const onChange = (event, prop) => {
+		console.log(`${prop}: ${event.target.value}`);
 		setForm((estado) => ({ ...estado, [prop]: event.target.value }));
 	};
 
+	const navegar = useNavigate();
+
 	const metaMemoria = estado.objetos[id];
+
 	useEffect(() => {
 		if (!id) return;
 		if (!metaMemoria) return navegar("/404");
 		setForm(metaMemoria);
-	}, [id, navegar, metaMemoria]);
+	}, [id, metaMemoria, navegar]);
 
-	const { detalles, eventos, periodo, icono, completado, meta, plazo } = form;
+	const enCrear = async (evento) => {
+		evento.preventDefault();
+		// console.log(form);
+		const nuevaMeta = await crearMeta(form);
+		enviar({ tipo: "crear", meta: nuevaMeta });
+		regresar();
+	};
+
+	const enActualizar = async (evento) => {
+		evento.preventDefault();
+		// console.log(form);
+		const metaActualizada = await actualizarMeta(form);
+		enviar({ tipo: "actualizar", meta: metaActualizada });
+		regresar();
+	};
+
+	const enBorrar = async () => {
+		// console.log(form);
+		const id = form.id;
+		await borrarMeta(id);
+		enviar({ tipo: "borrar", id });
+		regresar();
+	};
+
+	const regresar = () => {
+		navegar("/lista");
+	};
 
 	const frecuencias = ["dia", "semana", "mes", "anio"];
 	const iconos = ["💻", "🏃", "📚", "✈️", "💵"];
@@ -77,7 +83,8 @@ export function Detalles() {
 					/>
 				</label>
 				<label className="label">
-					Con que frecuencia deseas cumplir tu meta?
+					Con que frecuencia deseas cumplir tu meta?{" "}
+					<span>(ej. 1 vez a la semana)</span>
 					<div className="flex mb-6">
 						<input
 							onChange={(e) => onChange(e, "eventos")}
@@ -89,8 +96,6 @@ export function Detalles() {
 							onChange={(e) => onChange(e, "periodo")}
 							value={periodo}
 							className="input"
-							name=""
-							id=""
 						>
 							{frecuencias.map((opcion) => (
 								<option key={opcion} value={opcion}>
@@ -133,8 +138,6 @@ export function Detalles() {
 						onChange={(e) => onChange(e, "icono")}
 						value={icono}
 						className="input"
-						name=""
-						id=""
 					>
 						{iconos.map((icono) => (
 							<option key={icono} value={icono}>
@@ -148,21 +151,21 @@ export function Detalles() {
 				{id ? (
 					<>
 						<button
-							onClick={actualizar}
+							onClick={enActualizar}
 							className="boton boton--negro"
 						>
 							Actualizar
 						</button>
-						<button onClick={borrar} className="boton boton--rojo">
+						<button onClick={enBorrar} className="boton boton--rojo">
 							Borrar
 						</button>
 					</>
 				) : (
-					<button onClick={crear} className="boton boton--negro">
+					<button onClick={enCrear} className="boton boton--negro">
 						Crear
 					</button>
 				)}
-				<button onClick={cancelar} className="boton boton--gris">
+				<button onClick={regresar} className="boton boton--gris">
 					Cancelar
 				</button>
 			</div>
